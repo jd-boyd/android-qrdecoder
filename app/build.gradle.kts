@@ -2,17 +2,19 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.compose.compiler)
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
+
 
 }
 
 android {
     namespace = "com.boydtechnicalsolutions.qrdecoder"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.boydtechnicalsolutions.qrdecoder"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 30
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
@@ -67,4 +69,37 @@ dependencies {
 
     // ML Kit Barcode Scanning
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+}
+
+tasks.named("preBuild") {
+    dependsOn("ktlintCheck")
+}
+
+ktlint {
+    version.set("1.0.1")
+    debug.set(false)
+    verbose.set(true)
+    android.set(true)
+    outputToConsole.set(true)
+    outputColorName.set("RED")
+    ignoreFailures.set(true) // Don't fail build on formatting issues for now
+
+    // Exclude generated files
+    filter {
+        exclude("**/generated/**")
+        exclude("**/build/**")
+    }
+}
+
+// Custom formatting tasks
+tasks.register("formatCode") {
+    description = "Format Kotlin code with ktlint"
+    group = "formatting"
+    dependsOn("ktlintFormat")
+}
+
+tasks.register("checkFormat") {
+    description = "Check Kotlin code formatting with ktlint"
+    group = "verification"
+    dependsOn("ktlintCheck")
 }
