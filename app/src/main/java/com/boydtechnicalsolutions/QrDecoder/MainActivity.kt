@@ -115,16 +115,28 @@ class MainActivity : ComponentActivity() {
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
-                        Button(
-                            onClick = {
-                                val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                                val clip = ClipData.newPlainText("QR Code", decodedText)
-                                clipboard.setPrimaryClip(clip)
-                                Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
-                            },
-                            modifier = Modifier.align(Alignment.End)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text("Copy")
+                            Button(
+                                onClick = {
+                                    decodedText = ""
+                                    Toast.makeText(context, "Cleared", Toast.LENGTH_SHORT).show()
+                                }
+                            ) {
+                                Text("Clear")
+                            }
+                            Button(
+                                onClick = {
+                                    val clipboard = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("QR Code", decodedText)
+                                    clipboard.setPrimaryClip(clip)
+                                    Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+                                }
+                            ) {
+                                Text("Copy")
+                            }
                         }
                     }
                 }
