@@ -3,8 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.compose.compiler)
     id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
-
-
 }
 
 android {
@@ -13,10 +11,12 @@ android {
 
     defaultConfig {
         applicationId = "com.boydtechnicalsolutions.qrdecoder"
-        minSdk = 30
-        targetSdk = 36
+        minSdk =  34
         versionCode = 1
-        versionName = "1.0"
+
+        versionName = "1.0.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -30,20 +30,48 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true // Ensure this is true or not present (defaults to true)
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+            isIncludeAndroidResources = true
+            all {
+                it.useJUnitPlatform()
+                it.testLogging {
+                    events("passed", "skipped", "failed", "standardOut", "standardError")
+                    showStandardStreams = true
+                }
+                // Set timeout for individual tests to prevent hanging
+                it.systemProperty("junit.jupiter.execution.timeout.default", "30s")
+                it.systemProperty("kotlinx.coroutines.debug", "on")
+            }
+        }
+    }
+
+    lint {
+        // Ignore system-only permissions - this app is intended for specialized devices
+        disable += "ProtectedPermissions"
+    }
+
+
+}
+
+
+kotlin {
+    jvmToolchain(21) // was 11
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -61,6 +89,29 @@ dependencies {
     implementation(libs.androidx.material3)
 
     // CameraX
+    val cameraVersion = "1.3.0"
+    implementation("androidx.camera:camera-core:$cameraVersion")
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
+
+    // ML Kit Barcode Scanning
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    // Core Android
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.10.0")
+
+    // Compose
+    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+
+    // CameraX
     val cameraxVersion = "1.3.0"
     implementation("androidx.camera:camera-core:$cameraxVersion")
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
@@ -70,6 +121,7 @@ dependencies {
     // ML Kit Barcode Scanning
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
 }
+
 
 tasks.named("preBuild") {
     dependsOn("ktlintCheck")

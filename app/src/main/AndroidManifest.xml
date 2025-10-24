@@ -14,12 +14,12 @@
         android:label="BTS QR Decode"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Material3.DayNight"
+        android:theme="@android:style/Theme.Material.Light"
         tools:targetApi="31">
         <activity
-            android:name="com.boydtechnicalsolutions.QrDecoder.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.DayNight">
+            android:theme="@android:style/Theme.Material.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
