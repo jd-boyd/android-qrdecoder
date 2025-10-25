@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.boydtechnicalsolutions.qrdecoder"
-        minSdk =  34
+        minSdk =  31
         versionCode = 1
 
         versionName = "1.0.0"
