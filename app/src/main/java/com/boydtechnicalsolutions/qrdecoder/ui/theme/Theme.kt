@@ -1,4 +1,4 @@
-package com.boydtechnicalsolutions.QrDecoder.ui.theme
+package com.boydtechnicalsolutions.qrdecoder.ui.theme
 
 import android.app.Activity
 import android.os.Build

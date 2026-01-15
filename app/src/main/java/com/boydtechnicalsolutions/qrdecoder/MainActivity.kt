@@ -16,6 +16,7 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @ExperimentalGetImage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -61,10 +63,11 @@ class MainActivity : ComponentActivity() {
         cameraExecutor.shutdown()
     }
 
+    @ExperimentalGetImage
     @Composable
     fun QRScannerScreen() {
         val context = LocalContext.current
-        var decodedText by remember { mutableStateOf("") }
+        var decodedText by rememberSaveable { mutableStateOf("") }
         val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
 
         Column(
@@ -138,6 +141,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @ExperimentalGetImage
     private fun bindCamera(
         cameraProvider: ProcessCameraProvider,
         previewView: PreviewView,

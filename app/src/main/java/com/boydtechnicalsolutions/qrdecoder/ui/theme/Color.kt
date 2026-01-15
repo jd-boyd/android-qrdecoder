@@ -1,4 +1,4 @@
-package com.boydtechnicalsolutions.QrDecoder.ui.theme
+package com.boydtechnicalsolutions.qrdecoder.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
